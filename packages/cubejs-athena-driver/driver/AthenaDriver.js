@@ -15,6 +15,7 @@ class AthenaDriver extends BaseDriver {
     super();
 
     this.config = {
+      database: process.env.CUBEJS_DB_NAME,
       accessKeyId: process.env.CUBEJS_AWS_KEY,
       secretAccessKey: process.env.CUBEJS_AWS_SECRET,
       region: process.env.CUBEJS_AWS_REGION,
@@ -127,6 +128,12 @@ class AthenaDriver extends BaseDriver {
     return this.mergeSchemas([tablesSchema, viewsSchema]);
   }
 
+  // new
+  informationSchemaQuery() {
+    console.log(`[DS] informationSchemaQuery > this.config.database=${this.config.database}`);
+    return `${super.informationSchemaQuery()} AND columns.table_schema = '${this.config.database}'`;
+  }
+
   async viewsSchema(tablesSchema) {
     // eslint-disable-next-line camelcase
     const isView = ({ table_schema, table_name }) => !tablesSchema[table_schema]
@@ -147,6 +154,7 @@ class AthenaDriver extends BaseDriver {
       SELECT table_schema, table_name
       FROM information_schema.tables
       WHERE tables.table_schema NOT IN ('information_schema', 'mysql', 'performance_schema', 'sys')
+      AND table_schema = '${this.config.database}'
     `);
 
     return data;

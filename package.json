@@ -32,7 +32,10 @@
     "core-js": "^3.6.5",
     "ramda": "^0.27.0",
     "rollup-plugin-dts": "^1.1.8",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "rollbar": "^2.21.1",
+    "@rollbar/react": "^0.8.0"
+
   },
   "files": [
     "src",
